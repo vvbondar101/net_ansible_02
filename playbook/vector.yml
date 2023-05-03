@@ -1,0 +1,21 @@
+---
+- name: Install Vector
+  hosts: vector
+  tasks:
+    - name: Create a directory Vector
+      ansible.builtin.file:
+        path: "./vector"
+        state: directory
+        mode: 0755
+      become: true
+    - name: Download Vector
+      ansible.builtin.get_url:
+        url: https://packages.timber.io/vector/{{ vector_version }}/vector_{{ vector_version }}-1_{{ srv_architecture }}.deb
+        dest: "./vector/vector_{{ vector_version }}-1_{{ srv_architecture }}.deb"
+        mode: 0644
+        timeout: 200
+    - name: Install Vector
+      ansible.builtin.apt:
+        deb: "./vector/vector_{{ vector_version }}-1_{{ srv_architecture }}.deb"
+        state: present
+      become: true
